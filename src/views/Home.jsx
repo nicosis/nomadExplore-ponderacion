@@ -70,7 +70,7 @@ const Home = () => {
       calculateRecommendation();
     }
   };
-// ARREGLAR
+  // ARREGLAR
   const calculateRecommendation = () => {
     selections.forEach((selection) => {
       if (selection === 0) {

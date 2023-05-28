@@ -13,36 +13,45 @@ const imagePairs = [
   { img1: imgUrban, img2: imgRelax },
 ];
 
-const destinationWeights = {
-  Roma: {
-    cultura: 10,
-    moda: 7,
-    gastronomia: 10,
-    streetFood: 5,
-    urban: 5,
-    relax: 5,
+const destinationWeights = [
+  {
+    destination: "Roma",
+    weights: {
+      cultura: 10,
+      moda: 5,
+      gastronomia: 10,
+      streetFood: 5,
+      urban: 5,
+      relax: 5,
+    },
   },
-  Londres: {
-    cultura: 9,
-    moda: 10,
-    gastronomia: 1,
-    streetFood: 9,
-    urban: 10,
-    relax: 1,
+  {
+    destination: "Londres",
+    weights: {
+      cultura: 9,
+      moda: 10,
+      gastronomia: 1,
+      streetFood: 9,
+      urban: 10,
+      relax: 1,
+    },
   },
-  Mikonos: {
-    cultura: 1,
-    moda: 1,
-    gastronomia: 5,
-    streetFood: 1,
-    urban: 1,
-    relax: 10,
+  {
+    destination: "Mikonos",
+    weights: {
+      cultura: 1,
+      moda: 7,
+      gastronomia: 5,
+      streetFood: 1,
+      urban: 1,
+      relax: 10,
+    },
   },
-};
+];
 
 const Selection = () => {
   const [pairIndex, setPairIndex] = useState(0);
-
+  const [recommendedDestination, setRecommendedDestination] = useState(null);
   const [userWeights, setUserWeights] = useState({
     cultura: 0,
     moda: 0,
@@ -52,48 +61,122 @@ const Selection = () => {
     relax: 0,
   });
 
-  const ClickImage1 = (category) => {
+  console.log(recommendedDestination);
+  console.log("user weight: ", userWeights);
 
-    setUserWeights((prevUserWeights) => ({
-      ...prevUserWeights,
-      cultura: prevUserWeights.cultura + 1,
-    }));
+  const setNextPair = () => {
+    if (pairIndex < imagePairs.length - 1) {
+      setPairIndex(pairIndex + 1);
+    } else {
+      //   setPairIndex(0);
+      calculateRecommendation();
+    }
   };
-  console.log("clic img 1 fuera:", userWeights);
 
-  const ClickImage2 = () => {
-    console.log("clic img 2");
-    console.log("user pond: ", userWeights);
+  const clickImage1 = () => {
+    if (pairIndex === 0) {
+      setUserWeights((prevUserWeights) => ({
+        ...prevUserWeights,
+        cultura: prevUserWeights.cultura + 1,
+      }));
+    } else if (pairIndex === 1) {
+      setUserWeights((prevUserWeights) => ({
+        ...prevUserWeights,
+        gastronomia: prevUserWeights.gastronomia + 1,
+      }));
+    } else if (pairIndex === 2) {
+      setUserWeights((prevUserWeights) => ({
+        ...prevUserWeights,
+        urban: prevUserWeights.urban + 1,
+      }));
+    }
+    setNextPair();
+    // calculateRecommendation();
+  };
+
+  const clickImage2 = () => {
+    if (pairIndex === 0) {
+      setUserWeights((prevUserWeights) => ({
+        ...prevUserWeights,
+        moda: prevUserWeights.moda + 1,
+      }));
+    } else if (pairIndex === 1) {
+      setUserWeights((prevUserWeights) => ({
+        ...prevUserWeights,
+        streetFood: prevUserWeights.streetFood + 1,
+      }));
+    } else if (pairIndex === 2) {
+      setUserWeights((prevUserWeights) => ({
+        ...prevUserWeights,
+        relax: prevUserWeights.relax + 1,
+      }));
+    }
+    setNextPair();
+    // calculateRecommendation();
+  };
+
+  const calculateRecommendation = () => {
+    let maxScore = 0;
+    let recommendedDestination1 = null;
+
+    destinationWeights.forEach((destinationWeight) => {
+      const { destination, weights } = destinationWeight;
+      let score = 0;
+
+      for (const category in userWeights) {
+        score += userWeights[category] * weights[category];
+      }
+      if (score > maxScore) {
+        maxScore = score;
+        recommendedDestination1 = destination;
+      }
+      console.log("score: ", score);
+    });
+    setRecommendedDestination(recommendedDestination1);
   };
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div style={{ margin: "auto", textAlign: "center" }}>
-        <h2>Click en la imagen que más te guste // Serie: {pairIndex + 1}</h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div
-            style={{
-              border: "1px solid black",
-              padding: "10px",
-              marginRight: "20px",
-            }}
-          >
-            <img
-              src={imgCultura}
-              alt="Imagen 1"
-              style={{ width: "200px", height: "200px", cursor: "pointer" }}
-              onClick={() => ClickImage1("Cultura")}
-            />
+        {recommendedDestination ? (
+          <div>
+            <h2>Tu destino recomendado es: {recommendedDestination}</h2>
+            <p>
+              Aquí puedes encontrar información adicional sobre
+              {recommendedDestination}
+            </p>
           </div>
-          <div style={{ border: "1px solid black", padding: "10px" }}>
-            <img
-              src={imgModa}
-              alt="Imagen 2"
-              style={{ width: "200px", height: "200px", cursor: "pointer" }}
-              onClick={ClickImage2}
-            />
+        ) : (
+          <div>
+            <h2>
+              Click en la imagen que más te guste // Serie: {pairIndex + 1}
+            </h2>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  border: "1px solid black",
+                  padding: "10px",
+                  marginRight: "20px",
+                }}
+              >
+                <img
+                  src={imagePairs[pairIndex].img1}
+                  alt="Imagen 1"
+                  style={{ width: "200px", height: "200px", cursor: "pointer" }}
+                  onClick={clickImage1}
+                />
+              </div>
+              <div style={{ border: "1px solid black", padding: "10px" }}>
+                <img
+                  src={imagePairs[pairIndex].img2}
+                  alt="Imagen 2"
+                  style={{ width: "200px", height: "200px", cursor: "pointer" }}
+                  onClick={clickImage2}
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
