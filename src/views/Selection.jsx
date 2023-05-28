@@ -31,8 +31,8 @@ const destinationWeights = [
       cultura: 9,
       moda: 10,
       gastronomia: 1,
-      streetFood: 9,
-      urban: 10,
+      streetFood: 8,
+      urban: 9,
       relax: 1,
     },
   },
@@ -41,9 +41,9 @@ const destinationWeights = [
     weights: {
       cultura: 1,
       moda: 7,
-      gastronomia: 5,
+      gastronomia: 9,
       streetFood: 1,
-      urban: 1,
+      urban: 3,
       relax: 10,
     },
   },
@@ -68,71 +68,58 @@ const Selection = () => {
     if (pairIndex < imagePairs.length - 1) {
       setPairIndex(pairIndex + 1);
     } else {
-      //   setPairIndex(0);
       calculateRecommendation();
     }
   };
 
+  const clickImage = (category, value) => {
+    setUserWeights((prevUserWeights) => ({
+      ...prevUserWeights,
+      [category]: prevUserWeights[category] + value,
+    }));
+    setNextPair();
+  };
+
   const clickImage1 = () => {
     if (pairIndex === 0) {
-      setUserWeights((prevUserWeights) => ({
-        ...prevUserWeights,
-        cultura: prevUserWeights.cultura + 1,
-      }));
+      clickImage("cultura", 1);
     } else if (pairIndex === 1) {
-      setUserWeights((prevUserWeights) => ({
-        ...prevUserWeights,
-        gastronomia: prevUserWeights.gastronomia + 1,
-      }));
+      clickImage("gastronomia", 1);
     } else if (pairIndex === 2) {
-      setUserWeights((prevUserWeights) => ({
-        ...prevUserWeights,
-        urban: prevUserWeights.urban + 1,
-      }));
+      clickImage("urban", 1);
     }
-    setNextPair();
-    // calculateRecommendation();
   };
 
   const clickImage2 = () => {
     if (pairIndex === 0) {
-      setUserWeights((prevUserWeights) => ({
-        ...prevUserWeights,
-        moda: prevUserWeights.moda + 1,
-      }));
+      clickImage("moda", 1);
     } else if (pairIndex === 1) {
-      setUserWeights((prevUserWeights) => ({
-        ...prevUserWeights,
-        streetFood: prevUserWeights.streetFood + 1,
-      }));
+      clickImage("streetFood", 1);
     } else if (pairIndex === 2) {
-      setUserWeights((prevUserWeights) => ({
-        ...prevUserWeights,
-        relax: prevUserWeights.relax + 1,
-      }));
+      clickImage("relax", 1);
     }
-    setNextPair();
-    // calculateRecommendation();
   };
 
   const calculateRecommendation = () => {
     let maxScore = 0;
-    let recommendedDestination1 = null;
+    let recommendedDestination = null;
 
-    destinationWeights.forEach((destinationWeight) => {
+    for (const i in destinationWeights) {
+      const destinationWeight = destinationWeights[i];
       const { destination, weights } = destinationWeight;
       let score = 0;
 
       for (const category in userWeights) {
         score += userWeights[category] * weights[category];
       }
+
       if (score > maxScore) {
         maxScore = score;
-        recommendedDestination1 = destination;
+        recommendedDestination = destination;
       }
       console.log("score: ", score);
-    });
-    setRecommendedDestination(recommendedDestination1);
+    }
+    setRecommendedDestination(recommendedDestination);
   };
 
   return (
