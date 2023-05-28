@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const imgRelax = "https://picsum.photos/id/49/200/300";
+const imgRelax = "https://picsum.photos/id/318/200/300";
 const imgUrban = "https://picsum.photos/id/43/200/300";
 const imgVidaNoct = "https://picsum.photos/id/158/200/300";
 const imgGastro = "https://picsum.photos/id/292/200/300";
@@ -70,7 +70,7 @@ const Home = () => {
       calculateRecommendation();
     }
   };
-
+// ARREGLAR
   const calculateRecommendation = () => {
     selections.forEach((selection) => {
       if (selection === 0) {
@@ -90,6 +90,7 @@ const Home = () => {
     });
 
     console.log('seleccion user after: ', weights);
+    
     let maxWeight = -Infinity;
     let recommendedDestination = null;
 
