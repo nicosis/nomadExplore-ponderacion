@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const imgCultura = "https://picsum.photos/id/799/200/300";
-const imgCompras = "https://picsum.photos/id/1059/200/300";
-const imgGastronomia = "https://picsum.photos/id/490/200/300";
+const imgCultura = "https://cdn.culturagenial.com/es/imagenes/whatsapp-image-2021-10-19-at-18-47-29-cke.jpg";
+const imgCompras = "https://media.istockphoto.com/id/1369227756/es/foto/ri%C3%A9ndose-de-su-camino-a-trav%C3%A9s-del-centro-comercial.jpg?s=1024x1024&w=is&k=20&c=VwRB4XcKPB0SU6BTocS_7zuM0CKM0nfVeoPZdxDa-Do=";
+const imgGastronomia = "https://media.istockphoto.com/id/516329534/es/foto/%C3%BAltima-paja.jpg?s=1024x1024&w=is&k=20&c=WWO6jfzceV0quS75_h4F4w_7oSmg2-hLvN1Oxz8iz_c=";
 const imgEnologia = "https://picsum.photos/id/75/200/300";
 const imgUrban = "https://picsum.photos/id/670/200/300";
 const imgRelax = "https://picsum.photos/id/1083/200/300";
