@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 const imgCultura = "https://picsum.photos/id/799/200/300";
-const imgModa = "https://picsum.photos/id/1059/200/300";
+const imgCompras = "https://picsum.photos/id/1059/200/300";
 const imgGastronomia = "https://picsum.photos/id/490/200/300";
-const imgStreet = "https://picsum.photos/id/686/200/300";
+const imgEnologia = "https://picsum.photos/id/75/200/300";
 const imgUrban = "https://picsum.photos/id/670/200/300";
 const imgRelax = "https://picsum.photos/id/1083/200/300";
 
 const imagePairs = [
-  { img1: imgCultura, img2: imgModa },
-  { img1: imgGastronomia, img2: imgStreet },
+  { img1: imgCultura, img2: imgCompras },
+  { img1: imgGastronomia, img2: imgEnologia },
   { img1: imgUrban, img2: imgRelax },
 ];
 
@@ -18,9 +18,9 @@ const destinationWeights = [
     destination: "Roma",
     weights: {
       cultura: 10,
-      moda: 5,
+      compras: 1,
       gastronomia: 10,
-      streetFood: 5,
+      enologia: 10,
       urban: 5,
       relax: 5,
     },
@@ -28,10 +28,10 @@ const destinationWeights = [
   {
     destination: "Londres",
     weights: {
-      cultura: 9,
-      moda: 10,
+      cultura: 6,
+      compras: 10,
       gastronomia: 1,
-      streetFood: 8,
+      enologia: 1,
       urban: 9,
       relax: 1,
     },
@@ -40,10 +40,10 @@ const destinationWeights = [
     destination: "Mikonos",
     weights: {
       cultura: 1,
-      moda: 7,
-      gastronomia: 9,
-      streetFood: 1,
-      urban: 3,
+      compras: 10,
+      gastronomia: 10,
+      enologia: 5,
+      urban: 1,
       relax: 10,
     },
   },
@@ -54,22 +54,21 @@ const Selection = () => {
   const [recommendedDestination, setRecommendedDestination] = useState(null);
   const [userWeights, setUserWeights] = useState({
     cultura: 0,
-    moda: 0,
+    compras: 0,
     gastronomia: 0,
-    streetFood: 0,
+    enologia: 0,
     urban: 0,
     relax: 0,
   });
 
-  console.log(recommendedDestination);
   console.log("user weight: ", userWeights);
 
   const setNextPair = () => {
-    if (pairIndex < imagePairs.length - 1) {
+    // if (pairIndex < imagePairs.length - 1) {
       setPairIndex(pairIndex + 1);
-    } else {
-      calculateRecommendation();
-    }
+    // } else {
+      // calculateRecommendation(); // Calcular recomendación al pasar por todas las imágenes
+    // }
   };
 
   const clickImage = (category, value) => {
@@ -92,9 +91,9 @@ const Selection = () => {
 
   const clickImage2 = () => {
     if (pairIndex === 0) {
-      clickImage("moda", 1);
+      clickImage("compras", 1);
     } else if (pairIndex === 1) {
-      clickImage("streetFood", 1);
+      clickImage("enologia", 1);
     } else if (pairIndex === 2) {
       clickImage("relax", 1);
     }
@@ -113,25 +112,36 @@ const Selection = () => {
         score += userWeights[category] * weights[category];
       }
 
+      console.log(`Destination: ${destination}, Score: ${score}`); // Imprimir destino y puntaje en la consola
+
       if (score > maxScore) {
         maxScore = score;
         recommendedDestination = destination;
       }
-      console.log("score: ", score);
     }
     setRecommendedDestination(recommendedDestination);
+    console.log("Recommended Destination:", recommendedDestination); // Imprimir destino recomendado en la consola
+  };
+
+  const handleRecommendationClick = () => {
+    calculateRecommendation();
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
       <div style={{ margin: "auto", textAlign: "center" }}>
-        {recommendedDestination ? (
-          <div>
+        {pairIndex === imagePairs.length ? (
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
             <h2>Tu destino recomendado es: {recommendedDestination}</h2>
-            <p>
-              Aquí puedes encontrar información adicional sobre
-              {recommendedDestination}
-            </p>
+            <button onClick={handleRecommendationClick}>
+              Calcular Recomendación
+            </button>
           </div>
         ) : (
           <div>
